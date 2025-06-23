@@ -1,0 +1,142 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-image: url("{% static 'DiabetesPrediction/images/img2.jpg' %}");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            color: white;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.5s;
+        }
+
+        .cards {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 1.5rem;
+            border-radius: 10px;
+            width: 200px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card i {
+            font-size: 2rem;
+            color: #4dc3ff;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background-color: #4dc3ff;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #3da8df;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .cards {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <h1>DIABETES PREDICTION</h1>
+
+    <a href="{% url 'risk' %}" style="text-decoration: none; color: inherit;">
+
+    <div class="card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Risk Analysis</h3>
+        <p>Check your risk factors</p>
+    </div>
+</a>
+
+    <a href="{% url 'prevention' %}" style="text-decoration: none; color: inherit;">
+    <!-- Add two more cards to create a balanced layout -->
+    <div class="card">
+        <i class="fas fa-heartbeat"></i>
+        <h3>Prevention</h3>
+        <p>Steps to reduce your risk</p>
+    </div>
+
+
+        <a href="predict" class="btn">START PREDICTION <i class="fas fa-arrow-right"></i></a>
+
+
+    <script>
+        // Simple animation for cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,614 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Discussion Forum</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #3498db, #2ecc71);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .forum-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .forum-nav h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+        }
+
+        .new-post-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .new-post-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .category {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .category:hover, .category.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .posts {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .post {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-header {
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .post-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .post-author img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-stats {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .post-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .post-content {
+            padding: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .post-footer {
+            padding: 1rem 1.2rem;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .post-tag {
+            background: #edf2f7;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .post-action {
+            color: #95a5a6;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .post-action:hover {
+            color: #3498db;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 80%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            animation: modalSlide 0.3s;
+        }
+
+        @keyframes modalSlide {
+            from {opacity: 0; transform: translateY(-50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #555;
+        }
+
+        form {
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: #2ecc71;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+
+        .page-item {
+            background: white;
+            border: 1px solid #ddd;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .page-item:hover, .page-item.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            transition: background-color 0.3s;
+        }
+
+        .home-link:hover {
+            background-color: #1a252f;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .forum-nav {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Diabetes Discussion Forum</h1>
+        <p>Share experiences, ask questions, and learn from others</p>
+    </div>
+
+    <div class="container">
+        <a href="/" class="home-link">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+
+        <div class="forum-nav">
+            <h2>Community Discussions</h2>
+            <button id="newPostBtn" class="new-post-btn">
+                <i class="fas fa-plus"></i> Create New Post
+            </button>
+        </div>
+
+        <div class="categories">
+            <div class="category active">All Topics</div>
+            <div class="category">Diagnosis Experiences</div>
+            <div class="category">Treatment Options</div>
+            <div class="category">Lifestyle & Diet</div>
+            <div class="category">Technology & Devices</div>
+            <div class="category">Support & Motivation</div>
+            <div class="category">Research & News</div>
+        </div>
+
+        <div class="posts">
+            <!-- Sample Post 1 -->
+            <div class="post">
+                <div class="post-header">
+                    <div>
+                        <h3 class="post-title">My Journey with Type 2 Diabetes</h3>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <img src="{% static 'DiabetesPrediction/images/avatar1.jpg' %}" alt="User Avatar">
+                                <span>Sarah Johnson</span>
+                            </div>
+                            <span>Posted 2 days ago</span>
+                        </div>
+                    </div>
+                    <div class="post-stats">
+                        <div class="post-stat">
+                            <i class="fas fa-comment"></i>
+                            <span>15</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-heart"></i>
+                            <span>32</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>I was diagnosed with Type 2 diabetes three years ago at age 45. Initially, I felt overwhelmed and scared, but with lifestyle changes and support from my healthcare team, I've been able to manage my condition effectively...</p>
+                </div>
+                <div class="post-footer">
+                    <div class="post-tags">
+                        <div class="post-tag">Type 2</div>
+                        <div class="post-tag">Success Story</div>
+                        <div class="post-tag">Lifestyle Changes</div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-action">
+                            <i class="fas fa-reply"></i>
+                            <span>Reply</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-bookmark"></i>
+                            <span>Save</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Post 2 -->
+            <div class="post">
+                <div class="post-header">
+                    <div>
+                        <h3 class="post-title">New Continuous Glucose Monitor Changed My Life</h3>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <img src="{% static 'DiabetesPrediction/images/avatar2.jpg' %}" alt="User Avatar">
+                                <span>Michael Chen</span>
+                            </div>
+                            <span>Posted 5 days ago</span>
+                        </div>
+                    </div>
+                    <div class="post-stats">
+                        <div class="post-stat">
+                            <i class="fas fa-comment"></i>
+                            <span>24</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-heart"></i>
+                            <span>47</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>After struggling with blood sugar management for years, I finally got a continuous glucose monitor. The real-time data has been eye-opening and helped me understand how different foods and activities affect my levels...</p>
+                </div>
+                <div class="post-footer">
+                    <div class="post-tags">
+                        <div class="post-tag">Technology</div>
+                        <div class="post-tag">CGM</div>
+                        <div class="post-tag">Type 1</div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-action">
+                            <i class="fas fa-reply"></i>
+                            <span>Reply</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-bookmark"></i>
+                            <span>Save</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Post 3 -->
+            <div class="post">
+                <div class="post-header">
+                    <div>
+                        <h3 class="post-title">Favorite Low-Carb Recipes That Actually Taste Good</h3>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <img src="{% static 'DiabetesPrediction/images/avatar3.jpg' %}" alt="User Avatar">
+                                <span>Emily Rodriguez</span>
+                            </div>
+                            <span>Posted 1 week ago</span>
+                        </div>
+                    </div>
+                    <div class="post-stats">
+                        <div class="post-stat">
+                            <i class="fas fa-comment"></i>
+                            <span>42</span>
+                        </div>
+                        <div class="post-stat">
+                            <i class="fas fa-heart"></i>
+                            <span>89</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p>One of the biggest challenges after my diagnosis was finding tasty recipes that wouldn't spike my blood sugar. I've been experimenting in the kitchen for years now and wanted to share some of my favorite low-carb meals that my entire family enjoys...</p>
+                </div>
+                <div class="post-footer">
+                    <div class="post-tags">
+                        <div class="post-tag">Diet</div>
+                        <div class="post-tag">Recipes</div>
+                        <div class="post-tag">Low-Carb</div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-action">
+                            <i class="fas fa-reply"></i>
+                            <span>Reply</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-bookmark"></i>
+                            <span>Save</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <div class="page-item active">1</div>
+            <div class="page-item">2</div>
+            <div class="page-item">3</div>
+            <div class="page-item">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Post Modal -->
+    <div id="newPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create New Post</h2>
+            <form id="newPostForm">
+                <div class="form-group">
+                    <label for="postTitle">Title</label>
+                    <input type="text" id="postTitle" placeholder="Enter a descriptive title" required>
+                </div>
+                <div class="form-group">
+                    <label for="postCategory">Category</label>
+                    <select id="postCategory" required>
+                        <option value="">Select a category</option>
+                        <option value="diagnosis">Diagnosis Experiences</option>
+                        <option value="treatment">Treatment Options</option>
+                        <option value="lifestyle">Lifestyle & Diet</option>
+                        <option value="technology">Technology & Devices</option>
+                        <option value="support">Support & Motivation</option>
+                        <option value="research">Research & News</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="postContent">Content</label>
+                    <textarea id="postContent" placeholder="Share your experience, question, or information..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="postTags">Tags (comma separated)</label>
+                    <input type="text" id="postTags" placeholder="e.g., Type 1, Diet, Exercise">
+                </div>
+                <button type="submit" class="submit-btn">Post to Forum</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal Controls
+        const modal = document.getElementById("newPostModal");
+        const btn = document.getElementById("newPostBtn");
+        const span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Category Selection
+        const categories = document.querySelectorAll('.category');
+        categories.forEach(category => {
+            category.addEventListener('click', () => {
+                categories.forEach(c => c.classList.remove('active'));
+                category.classList.add('active');
+                // Here you would filter posts based on category
+                // For now this is just UI interaction
+            });
+        });
+
+        // Form Submission (would connect to backend in real implementation)
+        document.getElementById('newPostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // For demonstration purposes - in a real app you'd send this to the server
+            alert('Post submitted successfully! In a real application, this would be saved to the database.');
+
+            // Clear form and close modal
+            this.reset();
+            modal.style.display = "none";
+        });
+
+        // Like and bookmark functionality would be added with backend integration
+        document.querySelectorAll('.post-action').forEach(action => {
+            action.addEventListener('click', function() {
+                // Toggle active state for demonstration
+                this.classList.toggle('active');
+                // In real implementation, this would send data to server
+            });
+        });
+    </script>
+</body>
+</html>

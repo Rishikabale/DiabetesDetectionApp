@@ -1,0 +1,248 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Factors</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--light-color);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .intro {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            color: var(--dark-color);
+            margin: 1.5rem 0 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .risk-factors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .risk-card {
+            flex: 1 1 300px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .risk-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .risk-card-header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .risk-card-body {
+            padding: 1.5rem;
+        }
+
+        .risk-card-body ul {
+            list-style-position: inside;
+            padding-left: 1rem;
+        }
+
+        .risk-card-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modifiable {
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .non-modifiable {
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .preventive {
+            margin-top: 2rem;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary-color);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .preventive h2 {
+            color: var(--primary-color);
+            border-bottom: none;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .risk-factors {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Understanding Diabetes Risk Factors</h1>
+            <p>Knowledge is the first step toward prevention and management</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="intro">
+            <h2>What is Diabetes?</h2>
+            <p>Diabetes is a chronic health condition that affects how your body turns food into energy. When you have diabetes, your body either doesn't make enough insulin or can't use the insulin it makes as well as it should. Over time, this can cause serious health problems, including heart disease, vision loss, and kidney disease.</p>
+        </div>
+
+        <h2>Key Risk Factors</h2>
+
+        <div class="risk-factors">
+            <div class="risk-card non-modifiable">
+                <div class="risk-card-header">
+                    <div class="risk-icon">🧬</div>
+                    <h3>Non-Modifiable Risk Factors</h3>
+                </div>
+                <div class="risk-card-body">
+                    <p>These are factors you cannot change but should be aware of:</p>
+                    <ul>
+                        <li><strong>Family History:</strong> Having a parent or sibling with diabetes</li>
+                        <li><strong>Age:</strong> Being 45 years or older</li>
+                        <li><strong>Ethnicity:</strong> African American, Hispanic/Latino, American Indian, Asian American, or Pacific Islander ancestry</li>
+                        <li><strong>Medical History:</strong> History of gestational diabetes or giving birth to a baby weighing more than 9 pounds</li>
+                        <li><strong>Polycystic Ovary Syndrome:</strong> For women with PCOS</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="risk-card modifiable">
+                <div class="risk-card-header">
+                    <div class="risk-icon">🏃</div>
+                    <h3>Modifiable Risk Factors</h3>
+                </div>
+                <div class="risk-card-body">
+                    <p>These are factors you can change to reduce your risk:</p>
+                    <ul>
+                        <li><strong>Overweight or Obesity:</strong> Especially excess weight around the abdomen</li>
+                        <li><strong>Physical Inactivity:</strong> Less than 150 minutes of moderate exercise per week</li>
+                        <li><strong>Poor Diet:</strong> High in processed foods, sugar, and refined carbohydrates</li>
+                        <li><strong>High Blood Pressure:</strong> Readings of 140/90 mm Hg or higher</li>
+                        <li><strong>Abnormal Cholesterol Levels:</strong> Low HDL ("good") cholesterol and high triglycerides</li>
+                        <li><strong>Smoking:</strong> Increases insulin resistance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="risk-card modifiable">
+                <div class="risk-card-header">
+                    <div class="risk-icon">⚠️</div>
+                    <h3>Pre-Existing Conditions</h3>
+                </div>
+                <div class="risk-card-body">
+                    <p>These health conditions increase your diabetes risk:</p>
+                    <ul>
+                        <li><strong>Prediabetes:</strong> Blood sugar levels higher than normal but not high enough for diabetes diagnosis</li>
+                        <li><strong>Cardiovascular Disease:</strong> History of heart attack or stroke</li>
+                        <li><strong>Metabolic Syndrome:</strong> A cluster of conditions including high blood pressure, excess abdominal fat, abnormal cholesterol</li>
+                        <li><strong>Sleep Problems:</strong> Such as sleep apnea or shift work sleep disorder</li>
+                        <li><strong>Certain Medications:</strong> Including steroids, anti-psychotics, and some blood pressure medications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="preventive">
+            <h2>Prevention Strategies</h2>
+            <p>Studies show that you can lower your risk for type 2 diabetes by 58% by:</p>
+            <ul>
+                <li>Losing 7% of your body weight (or 15 pounds if you weigh 200 pounds)</li>
+                <li>Exercising moderately (such as brisk walking) 30 minutes a day, five days a week</li>
+                <li>Eating a balanced diet rich in fruits, vegetables, whole grains, and lean proteins</li>
+                <li>Limiting processed foods, sugary beverages, and excessive alcohol</li>
+                <li>Getting regular health check-ups to monitor blood glucose, blood pressure, and cholesterol</li>
+                <li>Managing stress through relaxation techniques, adequate sleep, and mental health support</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>This information is provided for educational purposes only and should not replace professional medical advice.</p>
+            <p>Always consult with healthcare providers regarding diabetes risk assessment and prevention strategies.</p>
+        </div>
+    </footer>
+</body>
+</html>
